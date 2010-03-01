@@ -1,0 +1,50 @@
+THIS IS A PSEUDO CODE FILE FOR MCHESS BASE
+CREATED BY THOMAS PETIT
+
+general idea: create a base application to govern the basic rules and gameplay of chess
+allow for players to manipulate their piece according to certain play rules as dictated by the codebase
+
+MAIN FILE:
+	MChess.java -- contains the board and all play mechanics
+	
+	--Variables
+		Main board - Array - piece.Piece
+		Captured Pieces - ArrayList - piece.Piece - 2
+	
+AUXILURY FILES:
+	Piece.java -- Superclass for all board pieces
+		private king.java
+		private queen.java		All these listed classes will contain ID's to identify themselves
+		private knight.java		and their allegion to which team, white or black.
+		private bishop.java
+		private rook.java
+		private pawn.java		Pawn will contains extra data indicating if it is able to move two, or have enpessant peformed on them.
+		
+	append: TBD if data will be stored in the king or rook about castling or if this will be computed on the spot
+			or stored by the MChess class.
+			
+			
+	PSEUDOCODE FOR CHECKING TO SEE IF A MOVE WOULD PUT THE KING IN CHECK
+		
+		prereqs:
+			start - array - 2 - array containing coordinates of piece being moved
+			end - array - 2 - array containing coordinates of place pieece is being moved
+			
+		save the piece at coordinates(end) in variable temp
+		move piece at (start) to (end)
+		make sure to replace (start) with an empty marker
+		check to see if the king for the current piece moved is in check because of the move. store in variable(inDanger)
+		move piece in (end) back to (start)
+		place piece stored in temp back in (end)
+		
+		IF king was put in danger by the move
+			THEN remove the possible movement from the arraylist containing them
+				 choose not to increment the index because the size of the arraylist
+				 shrank
+		
+		REPEAT FOR ALL MOVES INSIDE ARRAYLIST
+		
+		
+		
+		
+		
