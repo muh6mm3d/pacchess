@@ -845,11 +845,11 @@ public class MChess
 				//set variables inside king
 				((King)get(who)).move(new int[]{who[0],who[1]-2});
 				
-				System.out.println(get(who).isKing());
-				System.out.println("set space to equal king: "+set(new int[]{who[0],who[1]-2},get(who)));
-				System.out.println("set space who to be empty: "+set(who,new Empty()));
-				System.out.println("move rook: "+set(new int[]{who[0],who[1]-1},get(new int[]{who[0],who[1]-4})));
-				System.out.println("Make rooks old space empty: "+set(new int[]{who[0],who[1]-4},new Empty()));
+				//System.out.println(get(who).isKing());
+				//System.out.println("set space to equal king: "+set(new int[]{who[0],who[1]-2},get(who)));
+				//System.out.println("set space who to be empty: "+set(who,new Empty()));
+				//System.out.println("move rook: "+set(new int[]{who[0],who[1]-1},get(new int[]{who[0],who[1]-4})));
+				//System.out.println("Make rooks old space empty: "+set(new int[]{who[0],who[1]-4},new Empty()));
 			}
 			//castle right
 			else if(columnGreater(where,who))
@@ -1040,7 +1040,7 @@ public class MChess
 	/*
 	public static void main(String[] args)
 	{
-		System.out.println("Welcome to chess\nnew game started.");
+		//System.out.println("Welcome to chess\nnew game started.");
 		MChess game = new MChess();
 		while(true)
                 {
@@ -1096,16 +1096,16 @@ public class MChess
                                         System.out.print("  ");
                                     }
                                 }
-                            System.out.println();
+                            //System.out.println();
                         }
-                            System.out.println("move "+c+i);
+                            //System.out.println("move "+c+i);
                             String[] moves = game.validMovesChess(game.translateCoordinate(""+c+i));
                             for(String s:moves)
                             {
-                                System.out.println("\t"+s);
+                                //System.out.println("\t"+s);
                             }
                             (new Scanner(System.in)).nextLine();
-                            for(int b=0;b<20;b++){System.out.println();}
+                            for(int b=0;b<20;b++){//System.out.println();}
                         }
                     }
                     

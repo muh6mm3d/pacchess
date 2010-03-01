@@ -277,7 +277,7 @@ public class MChessGUI extends JFrame implements ActionListener
                 mchess.base.Error success = logic.move(findButtonCoord(active), findButtonCoord((JButton)e.getSource()));
                 if(!success.successful())
                 {
-                    System.out.println(success.toString());
+                    //System.out.println(success.toString());
                 }
                 active=null;
                 isWhiteTurn=!isWhiteTurn;
