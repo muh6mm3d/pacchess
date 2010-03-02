@@ -17,7 +17,7 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package mchess.base;
+package pacchess.base;
 /*
  * http://www.network-science.de/ascii/
  *
@@ -48,15 +48,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
-import mchess.piece.Allegiance;
-import mchess.piece.Bishop;
-import mchess.piece.Empty;
-import mchess.piece.King;
-import mchess.piece.Knight;
-import mchess.piece.Pawn;
-import mchess.piece.Piece;
-import mchess.piece.Queen;
-import mchess.piece.Rook;
+import pacchess.piece.Allegiance;
+import pacchess.piece.Bishop;
+import pacchess.piece.Empty;
+import pacchess.piece.King;
+import pacchess.piece.Knight;
+import pacchess.piece.Pawn;
+import pacchess.piece.Piece;
+import pacchess.piece.Queen;
+import pacchess.piece.Rook;
 //import sun.security.action.GetBooleanAction;
 
 

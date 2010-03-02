@@ -17,12 +17,20 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package mchess.piece;
+package pacchess.piece;
 
-public class Empty extends Piece
+public class Rook extends Piece
 {
-	public Empty()
+	private boolean notMoved;
+	public Rook(Allegiance a)
 	{
-		super(EMPTY,Allegiance.ANONE,"Empty");  
+		super(ROOK,a,"Rook");
+		notMoved=true;
+	}
+	public boolean notMoved() {
+		return notMoved;
+	}
+	public void setNotMoved(boolean notMoved) {
+		this.notMoved = notMoved;
 	}
 }

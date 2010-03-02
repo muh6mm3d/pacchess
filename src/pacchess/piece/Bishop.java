@@ -17,12 +17,12 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package mchess.piece;
+package pacchess.piece;
 
-public class Knight extends Piece
+public class Bishop extends Piece
 {
-	public Knight(Allegiance a)
+	public Bishop(Allegiance a)
 	{
-		super(KNIGHT,a,"Knight");
+		super(BISHOP,a,"Bishop");
 	}
 }

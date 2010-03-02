@@ -17,15 +17,15 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package mchess.base.gui;
+package pacchess.base.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mchess.base.*;
-import mchess.piece.*;
+import pacchess.base.*;
+import pacchess.piece.*;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -274,7 +274,7 @@ public class MChessGUI extends JFrame implements ActionListener
             }
             else if(((JButton)e.getSource()).getBackground()==moveColor)
             {
-                mchess.base.Error success = logic.move(findButtonCoord(active), findButtonCoord((JButton)e.getSource()));
+                pacchess.base.Error success = logic.move(findButtonCoord(active), findButtonCoord((JButton)e.getSource()));
                 if(!success.successful())
                 {
                     //System.out.println(success.toString());

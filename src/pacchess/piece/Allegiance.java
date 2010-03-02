@@ -17,20 +17,40 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package mchess.piece;
+package pacchess.piece;
 
-public class Rook extends Piece
+public class Allegiance
 {
-	private boolean notMoved;
-	public Rook(Allegiance a)
+	public static final long BLACK=65545487454L,WHITE=7879763321L,EMPTY=4155454454L;
+	private long aID;
+	
+	public static Allegiance ABLACK = new Allegiance(BLACK);
+	public static Allegiance AWHITE = new Allegiance(WHITE);
+	public static Allegiance ANONE = new Allegiance(EMPTY);
+	
+	public Allegiance(long a)
 	{
-		super(ROOK,a,"Rook");
-		notMoved=true;
+		aID=a;
 	}
-	public boolean notMoved() {
-		return notMoved;
+	
+	public boolean isBlack()
+	{
+		return BLACK==aID;
 	}
-	public void setNotMoved(boolean notMoved) {
-		this.notMoved = notMoved;
+	public boolean isWhite()
+	{
+		return WHITE==aID;
 	}
+	public boolean isEmpty()
+	{
+		return aID==EMPTY;
+	}
+	public long getID()
+	{
+		return aID;
+	}
+        public String toString()
+        {
+            return isBlack()?"Black":"White";
+        }
 }

@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package mchess.base.gui;
+package pacchess.base.gui;
 
 import java.awt.Image;
 
