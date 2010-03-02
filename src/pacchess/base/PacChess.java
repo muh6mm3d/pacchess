@@ -1,10 +1,10 @@
 /*
- * MChess - A chess logic base and GUI frontend
+ * PacChess - A chess logic base and GUI frontend
  * Copyright (C) 2010 Thomas Petit
  *
- * This file is part of MChess
+ * This file is part of PacChess
  *
- *   MChess is free software: you can redistribute it and/or modify
+ *   PacChess is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
  *   the Free Software Foundation, either version 3 of the License, or
  *   (at your option) any later version.
@@ -61,7 +61,7 @@ import pacchess.piece.Rook;
 
 
 
-public class MChess 
+public class PacChess
 {
 	private Piece[][] board;
 	private HashMap<Long,ArrayList<Piece>> captured;
@@ -75,7 +75,7 @@ public class MChess
 	public King bKing;
 	public King wKing;
 
-	public MChess()
+	public PacChess()
 	{
 		init();
 	}
@@ -1005,7 +1005,7 @@ public class MChess
 		return togo;
 	}
 
-	public void destroy(MChess togo)
+	public void destroy(PacChess togo)
 	{
 		for(int r=0;r<togo.board.length;r++)
 		{
@@ -1041,7 +1041,7 @@ public class MChess
 	public static void main(String[] args)
 	{
 		//System.out.println("Welcome to chess\nnew game started.");
-		MChess game = new MChess();
+		PacChess game = new PacChess();
 		while(true)
                 {
                     

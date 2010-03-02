@@ -1,10 +1,10 @@
 /*
- * MChess - A chess logic base and GUI frontend
+ * PacChess - A chess logic base and GUI frontend
  * Copyright (C) 2010 Thomas Petit
  *
- * This file is part of MChess
+ * This file is part of PacChess
  *
- *   MChess is free software: you can redistribute it and/or modify
+ *   PacChess is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
  *   the Free Software Foundation, either version 3 of the License, or
  *   (at your option) any later version.
@@ -21,15 +21,15 @@ package pacchess.piece;
 
 import java.util.ArrayList;
 
-import pacchess.base.MChess;
+import pacchess.base.PacChess;
 
 public class King extends Piece
 {
 	private int r;
 	private int c;
-	MChess controller;
+	PacChess controller;
 	private boolean notMoved;
-	public King(Allegiance a,MChess cont)
+	public King(Allegiance a,PacChess cont)
 	{
 		super(KING,a,"King");
 		r=-1;
@@ -71,7 +71,7 @@ public class King extends Piece
 	{
 		return inCheck(coord,this.controller);
 	}
-  public boolean inCheckNew(int[] coord, MChess controller)
+  public boolean inCheckNew(int[] coord, PacChess controller)
   {
       //TODO REPROGRAM INCHECK USING MY VALID MOVES METHODS. SO IT WILL BE CORRECT, Caused overflow error, fix this
       Piece[][] board = controller.board();
@@ -91,7 +91,7 @@ public class King extends Piece
       }
       return false;
   }
-	public boolean inCheck(int[] coord, MChess controller)
+	public boolean inCheck(int[] coord, PacChess controller)
 	{
     //System.out.println();
             /*
@@ -447,7 +447,7 @@ public class King extends Piece
 	{
 		return inCheckmate(controller);
 	}
-	public boolean inCheckmate(MChess controller)
+	public boolean inCheckmate(PacChess controller)
 	{
 		ArrayList<Integer[]> moves = new ArrayList<Integer[]>();
 		for(int r=0;r<controller.board().length;r++)

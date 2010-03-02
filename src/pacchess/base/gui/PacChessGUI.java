@@ -1,10 +1,10 @@
 /*
- * MChess - A chess logic base and GUI frontend
+ * PacChess - A chess logic base and GUI frontend
  * Copyright (C) 2010 Thomas Petit
  *
- * This file is part of MChess
+ * This file is part of PacChess
  *
- *   MChess is free software: you can redistribute it and/or modify
+ *   PacChess is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
  *   the Free Software Foundation, either version 3 of the License, or
  *   (at your option) any later version.
@@ -48,28 +48,28 @@ import javax.swing.JOptionPane;
  *
  * @author hrothgar
  */
-public class MChessGUI extends JFrame implements ActionListener
+public class PacChessGUI extends JFrame implements ActionListener
 {
     public static void main(String[] args)
     {
-        MChessGUI gui = new MChessGUI();
+        PacChessGUI gui = new PacChessGUI();
     }
     private boolean isWhiteTurn;
     private JButton[][] buttons;
     private JButton active;
     private int[][] activeMoves;
     private HashMap<String,Icon> images;
-    private MChess logic;
+    private PacChess logic;
     private Dimension size;
     private Icon defaultIcon;
 
     private static final String IMAGE_PATH = "image/scaled/";
 
-    public MChessGUI()
+    public PacChessGUI()
     {
         this(true);
     }
-    public MChessGUI(boolean white)
+    public PacChessGUI(boolean white)
     {
         super("Mobile Chess");
         isWhiteTurn=white;
@@ -85,7 +85,7 @@ public class MChessGUI extends JFrame implements ActionListener
         cont.setLayout(new GridLayout(8,8));
 
         //initializing logic class
-        logic = new MChess();
+        logic = new PacChess();
 
         //create a default imageicon and store it
         defaultIcon = new JButton().getIcon();
