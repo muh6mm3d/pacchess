@@ -22,6 +22,7 @@ package pacchess.base.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,6 +39,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
@@ -54,7 +56,9 @@ import javax.swing.JOptionPane;
  *
  * @author hrothgar
  */
-public class PacChessGUI extends JFrame implements ActionListener,ComponentListener
+public class PacChessGUI extends JFrame implements
+	ActionListener,
+	ComponentListener
 {
     public static void main(String[] args)
     {
@@ -87,12 +91,12 @@ public class PacChessGUI extends JFrame implements ActionListener,ComponentListe
     public void init()
     {
 
-	addComponentListener(this);
+	
 	Toolkit.getDefaultToolkit().setDynamicLayout(true);
         //set size of window and retrieve container
         size = new Dimension(800,800);
         Container cont = getContentPane();
-	cont.addComponentListener(this);
+	
 
         //set Layout to Grid: 8x8
         cont.setLayout(new GridLayout(8,8));
@@ -126,7 +130,7 @@ public class PacChessGUI extends JFrame implements ActionListener,ComponentListe
                 if(!piece.getAllegiance().isEmpty())
 		{
                         //Add imageicon to array for reference
-			initImage(piece);
+			initImage(piece);;
                 }
                 
                 defaultColorBoard(r,c);
@@ -136,28 +140,38 @@ public class PacChessGUI extends JFrame implements ActionListener,ComponentListe
         }
 	
 
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(size);
         setLocation(50, 0);
         setVisible(true);
 	scaleImages();
 	refreshBoard();
+	addComponentListener(this);
+	cont.addComponentListener(this);
     }
 
     public void initImage(Piece p)
     {
 	String path = p.getAllegiance()+p.getName()+".png";
 //	System.out.println(path);
+	if(originalImages.get(p.getAllegiance()).get(p)==null)
+	{
+	    URL url = this.getClass().getResource(IMAGE_PATH+path);
+	    Image piece = this.getToolkit().getImage(url);
 
-	URL url = this.getClass().getResource(IMAGE_PATH+path);
-	Image piece = this.getToolkit().getImage(url);
-
-	originalImages.get(p.getAllegiance()).put(p, piece);
+	    originalImages.get(p.getAllegiance()).put(p, piece);
+	}
     }
 
     public void scaleImages()
     {
-
+	LoadingBarFrame progress = new LoadingBarFrame(IMAGE_PATH,
+		getWidth()/8,
+		originalImages, scaledImages);
+	progress.execute();
+	while(!progress.isDone()){}
+	progress.dispose();
+	/*
 	for( Allegiance a : originalImages.keySet() )
 	{
 	    for( Piece key : originalImages.get(a).keySet() )
@@ -167,6 +181,9 @@ public class PacChessGUI extends JFrame implements ActionListener,ComponentListe
 			, Image.SCALE_SMOOTH)); //TODO SCALING
 	    }
 	}
+	progress.dispose();
+	 * 
+	 */
 	
     }
 
@@ -315,7 +332,12 @@ public class PacChessGUI extends JFrame implements ActionListener,ComponentListe
 
     public void componentResized(ComponentEvent ce) {
 	    setSize(getHeight(),getHeight());
-	    scaleImages();
+	    System.out.println("component resized!");
+	    if(size.getWidth()!=getWidth())
+	    {
+		scaleImages();
+		size.setSize(getWidth(),getWidth());
+	    }
 	    refreshBoard();
 //	    System.out.println(buttons[0][0].getHeight());
     }
