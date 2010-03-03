@@ -41,6 +41,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -67,7 +68,8 @@ public class PacChessGUI extends JFrame implements ActionListener,ComponentListe
     private Dimension size;
     private Icon defaultIcon;
 
-    private HashMap<Allegiance,HashMap<Piece,Image>> images;
+    private HashMap<Allegiance,HashMap<Piece,Image>> originalImages;
+    private HashMap<Allegiance,HashMap<Piece,Image>> scaledImages;
 
 
     private static final String IMAGE_PATH = "image/scaled/";
@@ -101,10 +103,14 @@ public class PacChessGUI extends JFrame implements ActionListener,ComponentListe
         //create a default imageicon and store it
         defaultIcon = new JButton().getIcon();
 
-        //create hashmaps to hold images
-        images = new HashMap<Allegiance,HashMap<Piece,Image>>();
-	images.put(Allegiance.AWHITE,new HashMap<Piece,Image>());
-	images.put(Allegiance.ABLACK,new HashMap<Piece,Image>());
+        //create hashmaps to hold originalImages
+        originalImages = new HashMap<Allegiance,HashMap<Piece,Image>>();
+	originalImages.put(Allegiance.AWHITE,new HashMap<Piece,Image>());
+	originalImages.put(Allegiance.ABLACK,new HashMap<Piece,Image>());
+
+	scaledImages = new HashMap<Allegiance,HashMap<Piece,Image>>();
+	scaledImages.put(Allegiance.AWHITE,new HashMap<Piece,Image>());
+	scaledImages.put(Allegiance.ABLACK,new HashMap<Piece,Image>());
 
         //ARRAY INITIALIZATION
             //Button array
@@ -134,6 +140,7 @@ public class PacChessGUI extends JFrame implements ActionListener,ComponentListe
         setSize(size);
         setLocation(50, 0);
         setVisible(true);
+	scaleImages();
 	refreshBoard();
     }
 
@@ -145,7 +152,22 @@ public class PacChessGUI extends JFrame implements ActionListener,ComponentListe
 	URL url = this.getClass().getResource(IMAGE_PATH+path);
 	Image piece = this.getToolkit().getImage(url);
 
-	images.get(p.getAllegiance()).put(p, piece);
+	originalImages.get(p.getAllegiance()).put(p, piece);
+    }
+
+    public void scaleImages()
+    {
+
+	for( Allegiance a : originalImages.keySet() )
+	{
+	    for( Piece key : originalImages.get(a).keySet() )
+	    {
+		Image large = originalImages.get(a).get(key);
+		scaledImages.get(a).put(key, large.getScaledInstance(buttons[0][0].getWidth(), buttons[0][0].getWidth()
+			, Image.SCALE_SMOOTH)); //TODO SCALING
+	    }
+	}
+	
     }
 
     public void defaultColorBoard(int r, int c)
@@ -198,8 +220,7 @@ public class PacChessGUI extends JFrame implements ActionListener,ComponentListe
 
                 if(!p.getAllegiance().isEmpty())
                 {
-		    Image image = images.get(p.getAllegiance()).get(p).getScaledInstance(b.getWidth(), b.getHeight()
-			    , Image.SCALE_SMOOTH);
+		    Image image = scaledImages.get(p.getAllegiance()).get(p);
 		    ImageIcon icon = new ImageIcon(image);
 		    b.setIcon(icon);
 		}
@@ -294,6 +315,7 @@ public class PacChessGUI extends JFrame implements ActionListener,ComponentListe
 
     public void componentResized(ComponentEvent ce) {
 	    setSize(getHeight(),getHeight());
+	    scaleImages();
 	    refreshBoard();
 //	    System.out.println(buttons[0][0].getHeight());
     }
