@@ -20,7 +20,6 @@
 package pacchess.base.gui;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ComponentEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -33,13 +32,9 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.net.URL;
 import java.util.HashMap;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
@@ -53,7 +48,7 @@ import javax.swing.JOptionPane;
  *
  * @author hrothgar
  */
-public class PacChessGUI extends JFrame implements ActionListener,ComponentListener
+public class PacChessGUI extends JFrame implements ActionListener
 {
     public static void main(String[] args)
     {
@@ -63,12 +58,10 @@ public class PacChessGUI extends JFrame implements ActionListener,ComponentListe
     private JButton[][] buttons;
     private JButton active;
     private int[][] activeMoves;
+    private HashMap<String,Icon> images;
     private PacChess logic;
     private Dimension size;
     private Icon defaultIcon;
-
-    private HashMap<Allegiance,HashMap<Piece,Image>> images;
-
 
     private static final String IMAGE_PATH = "image/scaled/";
 
@@ -84,13 +77,9 @@ public class PacChessGUI extends JFrame implements ActionListener,ComponentListe
     }
     public void init()
     {
-
-	addComponentListener(this);
-	Toolkit.getDefaultToolkit().setDynamicLayout(true);
         //set size of window and retrieve container
         size = new Dimension(800,800);
         Container cont = getContentPane();
-	cont.addComponentListener(this);
 
         //set Layout to Grid: 8x8
         cont.setLayout(new GridLayout(8,8));
@@ -102,9 +91,7 @@ public class PacChessGUI extends JFrame implements ActionListener,ComponentListe
         defaultIcon = new JButton().getIcon();
 
         //create hashmaps to hold images
-        images = new HashMap<Allegiance,HashMap<Piece,Image>>();
-	images.put(Allegiance.AWHITE,new HashMap<Piece,Image>());
-	images.put(Allegiance.ABLACK,new HashMap<Piece,Image>());
+        images = new HashMap<String,Icon>();
 
         //ARRAY INITIALIZATION
             //Button array
@@ -117,35 +104,57 @@ public class PacChessGUI extends JFrame implements ActionListener,ComponentListe
                 buttons[r][c].addActionListener(this);
                 Piece piece = logic.get(r,c);
 
+                //set Text on button PICTURE
+                //buttons[r][c].setText(piece.getID()!=Piece.EMPTY?piece.getAllegiance().toString().substring(0,1)+"-"+piece.getName():"");
+
+
                 if(!piece.getAllegiance().isEmpty())
-		{
+                {
+                    String pieceName = (piece.getAllegiance().isWhite()?"White":"Black")+piece.getName()+".png";
+                    File link = new File(IMAGE_PATH+pieceName);
+                    try {
+                        Image image = ImageIO.read(link);
+                        ImageIcon icon = new ImageIcon(image);
                         //Add imageicon to array for reference
-			initImage(piece);
+                        images.put(pieceName, icon);
+                        buttons[r][c].setIcon(icon);;
+                    } catch (IOException ex) {
+                       ex.printStackTrace();
+                    }
                 }
                 
+
+                //if black piece or empty, set disabled, because white starts first
+                /*
+                if(piece.getID() == Piece.EMPTY)
+                {
+                    buttons[r][c].setEnabled(false);
+                }
+                
+                else
+                {
+                    if(logic.get(r,c).getAllegiance().isWhite())
+                    {
+                        buttons[r][c].setEnabled(isWhiteTurn);
+                    }
+                    else if(logic.get(r,c).getAllegiance().isBlack())
+                    {
+                        buttons[r][c].setEnabled(!isWhiteTurn);
+                    }
+                }
+                 
+                 */
+
                 defaultColorBoard(r,c);
 
                 cont.add(buttons[r][c]);
             }
         }
-	
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(size);
-        setLocation(50, 0);
+        setLocation(565, 0);
         setVisible(true);
-	refreshBoard();
-    }
-
-    public void initImage(Piece p)
-    {
-	String path = p.getAllegiance()+p.getName()+".png";
-//	System.out.println(path);
-
-	URL url = this.getClass().getResource(IMAGE_PATH+path);
-	Image piece = this.getToolkit().getImage(url);
-
-	images.get(p.getAllegiance()).put(p, piece);
     }
 
     public void defaultColorBoard(int r, int c)
@@ -194,17 +203,22 @@ public class PacChessGUI extends JFrame implements ActionListener,ComponentListe
                 {
                     b.setEnabled(false);
                 }
-
+                 //set Text on button
+                //buttons[r][c].setText(p.getID()!=Piece.EMPTY?p.getAllegiance().toString().substring(0,1)+"-"+p.getName():"");
                 if(!p.getAllegiance().isEmpty())
                 {
-		    Image image = images.get(p.getAllegiance()).get(p).getScaledInstance(b.getWidth(), b.getHeight()
-			    , Image.SCALE_SMOOTH);
-		    ImageIcon icon = new ImageIcon(image);
-		    b.setIcon(icon);
-		}
+                    File link = new File(IMAGE_PATH+(p.getAllegiance().isWhite()?"White":"Black")+p.getName()+".png");
+                    try {
+                        Image image = ImageIO.read(link);
+                        ImageIcon icon = new ImageIcon(image);
+                        buttons[r][c].setIcon(icon);;
+                    } catch (IOException ex) {
+                       ex.printStackTrace();
+                    }
+                }
                 else
                 {
-                    b.setIcon(defaultIcon);
+                    buttons[r][c].setIcon(defaultIcon);
                 }
                 /*
                 if(p.getID() == Piece.EMPTY)
@@ -263,7 +277,7 @@ public class PacChessGUI extends JFrame implements ActionListener,ComponentListe
                 pacchess.base.Error success = logic.move(findButtonCoord(active), findButtonCoord((JButton)e.getSource()));
                 if(!success.successful())
                 {
-                    System.out.println(success.toString());
+                    //System.out.println(success.toString());
                 }
                 active=null;
                 isWhiteTurn=!isWhiteTurn;
@@ -274,14 +288,14 @@ public class PacChessGUI extends JFrame implements ActionListener,ComponentListe
                 {
                     if(logic.inCheckmate(Allegiance.AWHITE)&&logic.inCheck(Allegiance.AWHITE))
                     {
-                        JOptionPane.showMessageDialog(this, "Wow, White...how could you possibly suck so much at chess? That was a disgusting display of ineptitude...");
+                        JOptionPane.showMessageDialog(this, "Black has Won!");
                     }
                 }
                 else
                 {
                     if(logic.inCheckmate(Allegiance.ABLACK)&&logic.inCheck(Allegiance.ABLACK))
                     {
-                        JOptionPane.showMessageDialog(this, "Black got Owned!");
+                        JOptionPane.showMessageDialog(this, "White has Won!");
                     }
                 }
             }
@@ -289,23 +303,5 @@ public class PacChessGUI extends JFrame implements ActionListener,ComponentListe
         }
         //throw new UnsupportedOperationException("Not supported yet.");//TODO finish Action performed, remove unsuppported exception
 
-    }
-
-    public void componentResized(ComponentEvent ce) {
-	    setSize(getHeight(),getHeight());
-	    refreshBoard();
-//	    System.out.println(buttons[0][0].getHeight());
-    }
-
-    public void componentMoved(ComponentEvent ce) {
-	//throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void componentShown(ComponentEvent ce) {
-	///throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void componentHidden(ComponentEvent ce) {
-	//throw new UnsupportedOperationException("Not supported yet.");
     }
 }
