@@ -190,6 +190,7 @@ public class PacChessGUI extends JFrame implements ActionListener,ComponentListe
                 Piece p = logic.get(r,c);
                 JButton b = buttons[r][c];
                 defaultColorBoard(r,c);
+		
                 if(logic.isEmpty(new int[]{r,c}))
                 {
                     b.setEnabled(false);
