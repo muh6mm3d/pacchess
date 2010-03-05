@@ -32,10 +32,10 @@ public class LoadingBarFrame
 
     /** Creates new form LoadingBarFrame */
     public LoadingBarFrame(String ip, int s,HashMap<Allegiance,HashMap<Piece,Image>> il,
-	    HashMap<Allegiance,HashMap<Piece,Image>> is) {
+	    HashMap<Allegiance,HashMap<Piece,Image>> is,PacChessGUI gui) {
         initComponents();
 	setVisible(true);
-	res = new ImageResizer(ip,s,il,is);
+	res = new ImageResizer(ip,s,il,is,gui);
 	res.addPropertyChangeListener(this);
     }
 
