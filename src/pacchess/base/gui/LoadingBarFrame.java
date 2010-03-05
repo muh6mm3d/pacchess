@@ -62,11 +62,12 @@ public class LoadingBarFrame
         label = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setAlwaysOnTop(true);
         setResizable(false);
 
-        label.setFont(new java.awt.Font("DejaVu Sans", 0, 18)); // NOI18N
+        label.setFont(new java.awt.Font("DejaVu Sans", 0, 18));
         label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        label.setText("Loading MChess...");
+        label.setText("Loading PacChess...");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

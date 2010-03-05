@@ -92,7 +92,7 @@ public class PacChessGUI extends JFrame implements
     }
     public PacChessGUI(boolean white)
     {
-        super("Mobile Chess");
+        super("PacChess");
         isWhiteTurn=white;
         init();
     }
