@@ -15,6 +15,7 @@ import java.awt.Image;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
+import javax.swing.SwingWorker;
 import pacchess.base.gui.thread.ImageResizer;
 import pacchess.piece.Allegiance;
 import pacchess.piece.Piece;
@@ -28,20 +29,24 @@ public class LoadingBarFrame
 	implements PropertyChangeListener
 {
 
-    private ImageResizer res;
+    private SwingWorker worker;
 
     /** Creates new form LoadingBarFrame */
-    public LoadingBarFrame(String ip, int s,HashMap<Allegiance,HashMap<Piece,Image>> il,
-	    HashMap<Allegiance,HashMap<Piece,Image>> is,PacChessGUI gui) {
-        initComponents();
+    public LoadingBarFrame(SwingWorker worker) {
+        this(worker,100);
+    }
+    public LoadingBarFrame(SwingWorker worker, int max)
+    {
+	super();
+	initComponents();
 	setVisible(true);
-	res = new ImageResizer(ip,s,il,is,gui);
-	res.addPropertyChangeListener(this);
+	this.worker=worker;
+	this.worker.addPropertyChangeListener(this);
     }
 
     public void execute()
     {
-	res.execute();
+	worker.execute();
     }
 
      /** This method is called from within the constructor to
@@ -60,20 +65,18 @@ public class LoadingBarFrame
         setResizable(false);
 
         label.setFont(new java.awt.Font("DejaVu Sans", 0, 18)); // NOI18N
-        label.setText("Please Wait...");
+        label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        label.setText("Loading MChess...");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addComponent(label)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(label, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                    .addComponent(progressBar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -81,9 +84,9 @@ public class LoadingBarFrame
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addComponent(label)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -107,7 +110,7 @@ public class LoadingBarFrame
 
     public boolean isDone()
     {
-	return res.isDone();
+	return worker.isDone();
     }
 
     public void propertyChange(PropertyChangeEvent pce) {

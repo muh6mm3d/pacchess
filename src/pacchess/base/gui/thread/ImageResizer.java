@@ -31,7 +31,6 @@ public class ImageResizer extends javax.swing.SwingWorker
 	imageLocation = il;
 	imageStore = is;
 	parent = gui;
-
     }
 
     @Override

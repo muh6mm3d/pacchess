@@ -52,6 +52,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
+import pacchess.base.gui.thread.ContentPaneRefresh;
+import pacchess.base.gui.thread.ImageResizer;
 
 
 /**
@@ -74,8 +76,7 @@ public class PacChessGUI extends JFrame implements
     private Dimension size;
     private Icon defaultIcon;
 
-    private Container chessBoard;
-    private Container loading;
+   // private Container chessBoard;
 
     JProgressBar progressBar;
 
@@ -103,16 +104,10 @@ public class PacChessGUI extends JFrame implements
         //set size of window and retrieve container
         size = new Dimension(800,800);
         Container cont = getContentPane();
-	chessBoard = cont;
+	//chessBoard = cont;
 
 	progressBar = new JProgressBar(0,100);
 	progressBar.setVisible(true);
-
-	loading = new Container();
-	loading.setSize(size);
-	loading.add(progressBar);
-	loading.add(new JLabel("LABEL!!!!!!!!!!!!!!"));
-	loading.setVisible(true);
 
         //set Layout to Grid: 8x8
         cont.setLayout(new GridLayout(8,8));
@@ -159,12 +154,11 @@ public class PacChessGUI extends JFrame implements
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(size);
         setLocation(50, 0);
-        setVisible(true);
+        //TODO setVisible(true);
 	scaleImages();
-	refreshBoard();
+	refreshBoardResize();
 	addComponentListener(this);
 	cont.addComponentListener(this);
-	loading.addComponentListener(this);
     }
 
     public void initImage(Piece p)
@@ -182,9 +176,10 @@ public class PacChessGUI extends JFrame implements
 
     public void scaleImages()
     {
-	LoadingBarFrame progress = new LoadingBarFrame(IMAGE_PATH,
+	ImageResizer res = new ImageResizer(IMAGE_PATH,
 		getWidth()/8,
 		originalImages, scaledImages,this);
+	LoadingBarFrame progress = new LoadingBarFrame(res);
 	progress.execute();
 	while(!progress.isDone()){}
 	//TODO progress.dispose();
@@ -197,10 +192,10 @@ public class PacChessGUI extends JFrame implements
 		scaledImages.get(a).put(key, large.getScaledInstance(buttons[0][0].getWidth(), buttons[0][0].getWidth()
 			, Image.SCALE_SMOOTH)); //TODO SCALING
 	    }
-	}
-	progress.dispose();
-	 * 
+	} *
 	 */
+	progress.dispose();
+	
 	
     }
 
@@ -239,8 +234,13 @@ public class PacChessGUI extends JFrame implements
 
     public boolean refreshBoard()
     {
-	//setContentPane(loading);
-	setVisible(false);
+//	setVisible(false);
+//	ContentPaneRefresh paneRefresh = new ContentPaneRefresh(logic,
+//		buttons,this,scaledImages,defaultIcon);
+//	LoadingBarFrame progress = new LoadingBarFrame(paneRefresh,8*8);
+//	progress.execute();
+//	while(!progress.isDone()){}
+//	progress.dispose();
         for(int r=0;r<buttons.length;r++)
         {
             for(int c=0;c<buttons[0].length;c++)
@@ -249,7 +249,7 @@ public class PacChessGUI extends JFrame implements
                 JButton b = buttons[r][c];
                 defaultColorBoard(r,c);
 		b.setSize(getHeight()/8,getHeight()/8);
-		
+
                 if(logic.isEmpty(new int[]{r,c}))
                 {
                     b.setEnabled(false);
@@ -265,30 +265,24 @@ public class PacChessGUI extends JFrame implements
                 {
                     b.setIcon(defaultIcon);
                 }
-                /*
-                if(p.getID() == Piece.EMPTY)
-                {
-                    buttons[r][c].setEnabled(false);
-                }
-                
-                else
-                {
-                    if(logic.get(r,c).getAllegiance().isWhite())
-                    {
-                        buttons[r][c].setEnabled(isWhiteTurn);
-                    }
-                    else if(logic.get(r,c).getAllegiance().isBlack())
-                    {
-                        buttons[r][c].setEnabled(!isWhiteTurn);
-                    }
-                }
-                 * 
-                 */
             }
         }
-	//setContentPane(chessBoard);
-	//pack();
-	setVisible(true);
+	//setVisible(true);
+        return true;
+    }
+    public boolean refreshBoardResize()
+    {
+	setVisible(false);
+	ContentPaneRefresh paneRefresh = new ContentPaneRefresh(logic,
+		buttons,this,scaledImages,defaultIcon);
+	LoadingBarFrame progress = new LoadingBarFrame(paneRefresh,8*8);
+	progress.setLocation(getX()+(getHeight()/2)-(progress.getWidth()/2),
+		getY()+(getHeight()/2)-(progress.getHeight()/2) );
+	paneRefresh.addProgressBar(progress);
+	progress.execute();
+	//while(!progress.isDone()){}
+	//TODO progress.dispose();
+	//TODO setVisible(true);
         return true;
     }
 
@@ -354,7 +348,7 @@ public class PacChessGUI extends JFrame implements
     }
 
     public void componentResized(ComponentEvent ce) {
-	    
+	    //TODO optimize componentResized
 	    System.out.println("component resized!");
 	    if(size.getHeight()!=getHeight())
 	    {
@@ -363,7 +357,7 @@ public class PacChessGUI extends JFrame implements
 		setSize(getHeight(),getHeight());
 		scaleImages();
 		size.setSize(getHeight(),getHeight());
-		refreshBoard();
+		refreshBoardResize();
 	    }
 	    
 //	    System.out.println(buttons[0][0].getHeight());
