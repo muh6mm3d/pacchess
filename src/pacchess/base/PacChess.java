@@ -47,7 +47,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Scanner;
 
 import pacchess.piece.Allegiance;
 import pacchess.piece.Bishop;
@@ -58,7 +57,6 @@ import pacchess.piece.Pawn;
 import pacchess.piece.Piece;
 import pacchess.piece.Queen;
 import pacchess.piece.Rook;
-//import sun.security.action.GetBooleanAction;
 
 public class PacChess
 {
@@ -258,7 +256,7 @@ public class PacChess
 	return board[coord[0]][coord[1]] == p;
     }
 
-    protected ArrayList<int[]> pawnMoves(Piece p, Allegiance a, int[] coord)
+    protected ArrayList<int[]> pawnValid(Piece p, Allegiance a, int[] coord)
     {
 	ArrayList<int[]> valid = new ArrayList<int[]>();
 	Pawn p2 = (Pawn) p;
@@ -369,7 +367,7 @@ public class PacChess
 	return valid;
     }
 
-    protected ArrayList<int[]> rookMoves(Piece p, Allegiance a, int[] coord)
+    protected ArrayList<int[]> rookValid(Piece p, Allegiance a, int[] coord)
     {
 	ArrayList<int[]> valid = new ArrayList<int[]>();
 	//Allegiance is not applicable in this case for movement as Rook
@@ -487,7 +485,7 @@ public class PacChess
 	return valid;
     }
 
-    protected ArrayList<int[]> bishopMoves(Piece p, Allegiance a, int[] coord)
+    protected ArrayList<int[]> bishopValid(Piece p, Allegiance a, int[] coord)
     {
 	ArrayList<int[]> valid = new ArrayList<int[]>();
 	//recurse north-west
@@ -601,7 +599,25 @@ public class PacChess
 	    return valid;
     }
 
-    public ArrayList<int[]> knightMoves(Piece p, Allegiance a, int[] coord)
+    protected ArrayList<int[]> knightValid(Piece p, Allegiance a, int[] coord)
+    {
+
+	ArrayList<int[]> valid = new ArrayList<int[]>();
+	int[] rows = {-2,-2,-1,-1,02,02,01,01};
+	int[] cols = {-1,01,-2,02,-1,01,-2,02};
+
+	for(int i=0;i<rows.length&&i<cols.length;i++)
+	{
+	    if(isValid(coord[0]+rows[i],coord[1]+cols[i])
+		    && p.viableMove(get(coord[0]+rows[i],coord[1]+cols[i])))
+	    {
+		valid.add(new int[]{ coord[0]+rows[i],coord[1]+cols[i] });
+	    }
+	}
+	return valid;
+    }
+
+    public ArrayList<int[]> knightValidOld(Piece p, Allegiance a, int[] coord)
     {
 	ArrayList<int[]> valid = new ArrayList<int[]>();
 	int r;
@@ -689,7 +705,7 @@ public class PacChess
 	    return valid;
     }
 
-    public ArrayList<int[]> kingMoves(Piece p, Allegiance a, int[] coord)
+    public ArrayList<int[]> kingValid(Piece p, Allegiance a, int[] coord)
     {
 	ArrayList<int[]> valid = new ArrayList<int[]>();
 	//north-west
@@ -880,23 +896,23 @@ public class PacChess
 	}
 	if(p.isPawn())
 	{
-	    moves.addAll(pawnMoves(p, a, coord));
+	    moves.addAll(pawnValid(p, a, coord));
 	}
-	else if(p.isRook() || p.isQueen())
+	if(p.isRook() || p.isQueen())
 	{
-	    moves.addAll(rookMoves(p,a,coord));
+	    moves.addAll(rookValid(p,a,coord));
 	}
-	else if(p.isBishop() || p.isQueen())
+	if(p.isBishop() || p.isQueen())
 	{
-	    moves.addAll(bishopMoves(p,a,coord));
+	    moves.addAll(bishopValid(p,a,coord));
 	}
-	else if(p.isKnight())
+	if(p.isKnight())
 	{
-	    moves.addAll(knightMoves(p,a,coord));
+	    moves.addAll(knightValid(p,a,coord));
 	}
-	else if(p.isKing())
+	if(p.isKing())
 	{
-	    moves.addAll(kingMoves(p,a,coord));
+	    moves.addAll(kingValid(p,a,coord));
 	}
 	return removeInvalid(moves, p, a, coord);
 
