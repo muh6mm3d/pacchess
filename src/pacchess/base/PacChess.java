@@ -370,6 +370,35 @@ public class PacChess
     protected ArrayList<int[]> rookValid(Piece p, Allegiance a, int[] coord)
     {
 	ArrayList<int[]> valid = new ArrayList<int[]>();
+	int[] rshift = {-1,00,00,01};
+	int[] cshift = {00,-1,01,00};
+	for(int i=0;i<rshift.length;i++)
+	{
+	    int rs=rshift[i];
+	    int cs=cshift[i];
+
+	    for(int r=coord[0]+rs, c=coord[1]+cs ; isValid(r,c) && p.viableMove(get(r,c)) ; r+=rs, c+=cs)
+	    {
+		if(isEmpty(r,c))
+		{
+		    valid.add(new int[]{r,c});
+		}
+		else
+		{
+		    if(p.viableMove(get(r,c)))
+		    {
+			valid.add(new int[]{r,c});
+			break;
+		    }
+		}
+	    }
+	}
+	return valid;
+    }
+
+    protected ArrayList<int[]> rookValidOld(Piece p, Allegiance a, int[] coord)
+    {
+	ArrayList<int[]> valid = new ArrayList<int[]>();
 	//Allegiance is not applicable in this case for movement as Rook
 	//can move forward and backward
 

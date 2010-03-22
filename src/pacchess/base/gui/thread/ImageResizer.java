@@ -50,7 +50,7 @@ public class ImageResizer extends javax.swing.SwingWorker
 		imageStore.get(a).put(key, large.getScaledInstance(scale,
 			scale,
 			Image.SCALE_SMOOTH)); //TODO SCALING
-		System.out.println("\timage done..."+progress);
+		//System.out.println("\timage done..."+progress);
 		progress+=3;
 		setProgress(Math.min(progress,100));
 	    }
