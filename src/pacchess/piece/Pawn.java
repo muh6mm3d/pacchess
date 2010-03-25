@@ -20,6 +20,7 @@
 package pacchess.piece;
 
 public class Pawn extends Piece
+	implements MovementSensitive
 {
 	private boolean notMoved,isVulnerable;
 	public Pawn(Allegiance a)

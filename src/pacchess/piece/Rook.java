@@ -20,6 +20,7 @@
 package pacchess.piece;
 
 public class Rook extends Piece
+	implements MovementSensitive
 {
 	private boolean notMoved;
 	public Rook(Allegiance a)

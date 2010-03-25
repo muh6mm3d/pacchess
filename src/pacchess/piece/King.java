@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import pacchess.base.PacChess;
 
 public class King extends Piece
+	implements MovementSensitive
 {
 	private int r;
 	private int c;
@@ -430,9 +431,9 @@ public class King extends Piece
 	public boolean inCheckmate(PacChess controller)
 	{
 		ArrayList<Integer[]> moves = new ArrayList<Integer[]>();
-		for(int r=0;r<controller.board().length;r++)
+		for(int r=0;r<8;r++)
 		{
-			for(int c=0;c<controller.board()[0].length;c++)
+			for(int c=0;c<8;c++)
 			{
 				Piece p = controller.get(r,c);
 				if(p.getAllegiance()==this.allegiance)

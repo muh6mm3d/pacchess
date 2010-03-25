@@ -33,6 +33,7 @@ import pacchess.piece.Bishop;
 import pacchess.piece.Empty;
 import pacchess.piece.King;
 import pacchess.piece.Knight;
+import pacchess.piece.MovementSensitive;
 import pacchess.piece.Pawn;
 import pacchess.piece.Piece;
 import pacchess.piece.Queen;
@@ -162,16 +163,6 @@ public class PacChess
 		});
     }
 
-    public boolean isWhiteTurn()
-    {
-	return isWhiteTurn;
-    }
-
-    public boolean isBlackTurn()
-    {
-	return !isWhiteTurn;
-    }
-
     public boolean isValid(int[] coord)
     {
 	return coord[0] > -1 && coord[0] < 8 && coord[1] > -1 && coord[1] < 8;
@@ -214,15 +205,13 @@ public class PacChess
     {
 	return get(coord[0], coord[1]);
     }
-
     public Piece get(int r, int c)
     {
 	return board[r][c];
     }
-
-    public Piece[][] board()
+    public Piece get(String coord)
     {
-	return board;
+	return get(translateCoordinate(coord));
     }
 
     private boolean set(int[] coord, Piece p)
@@ -233,6 +222,10 @@ public class PacChess
 	    ((King) p).move(coord);
 	}
 	return board[coord[0]][coord[1]] == p;
+    }
+    private boolean set(String coord, Piece p)
+    {
+	return set(translateCoordinate(coord),p);
     }
 
     protected ArrayList<int[]> pawnValid(Piece p, Allegiance a, int[] coord)
@@ -592,11 +585,14 @@ public class PacChess
 	    }
 	    blackPawn = null;
 	}
+
 	if (!isValid(who) || !isValid(where))
 	{
 	    return new Error(false, "Who or Where is Invalid. Out of Bounds of Board. \nwho: " + Arrays.toString(who) + "\nwhere: " + Arrays.toString(where));
 	}
+
 	int[][] moves = validMovesCoordinate(who);
+	//Error Catching: if player tried to move to invalid spot.
 	if (!arrayContains(moves, where))
 	{
 	    Piece whoP = get(who);
@@ -606,26 +602,21 @@ public class PacChess
 	    {
 		return new Error(false, whoP.getName() + "(" + translateCoordinate(who) + ") cannot move onto piece\nof the same allegiance"
 			+ " (" + whereP.getName() + ": " + translateCoordinate(where) + ")");
-	    } else
+	    }
+	    //Attempted an Invalid move
+	    else
 	    {
 		return new Error(false, whoP.getName() + "(" + translateCoordinate(who) + ") cannot move to " + translateCoordinate(where) + ". invalid move");
 	    }
-
 	}
 
 	Piece moved = get(who);
-
 	//movement when castling
 	if (get(who).isKing() && Math.max(who[1], where[1]) - Math.min(who[1], where[1]) == 2)
 	{
-
 	    //castle left
 	    if (columnGreater(who, where))
-	    {
-		//set variables inside king
-//		((King) get(who)).move(new int[]{who[0], who[1] - 2});
-
-		
+	    {		
 		set(new int[]{who[0],who[1]-2},get(who));
 		set(who,new Empty());
 		set(new int[]{who[0],who[1]-1},get(new int[]{who[0],who[1]-4}));
@@ -634,8 +625,6 @@ public class PacChess
 	    //castle right
 	    else if (columnGreater(where, who))
 	    {
-		//set variables inside king
-		//((King) get(who)).move(new int[]{who[0], who[1] - 2});
 		set(new int[]{who[0], who[1] + 2}, get(who));
 		set(who, new Empty());
 		set(new int[]{who[0], who[1] + 1}, get(new int[]{who[0], who[1] + 3}));
@@ -661,7 +650,8 @@ public class PacChess
 	    {
 		captured.get(destination.getAllegiance().getID()).add(destination);
 	    }
-	} //movement for a pawn committing EnPessant
+	}
+	//movement for a pawn committing EnPessant
 	else if (get(who).isPawn() && (columnGreater(who, where) || columnGreater(where, who)) && isEmpty(where))
 	{
 	    //enPessant left
@@ -692,12 +682,10 @@ public class PacChess
 			{
 			    who[0], who[1] + 1
 			}));
-		set(new int[]
-			{
-			    who[0], who[1] + 1
-			}, new Empty());
+		set(new int[]{who[0], who[1] + 1}, new Empty());
 	    }
-	} //movement for everyone else
+	}
+	//movement for everyone else
 	else
 	{
 	    Piece destination = get(where);
@@ -713,16 +701,7 @@ public class PacChess
 	//Set that a king rook or pawn have moved, disallowing special moves
 	if (moved.isKing() || moved.isRook() || moved.isPawn())
 	{
-	    if (moved.isKing())
-	    {
-		((King) moved).setNotMoved(false);
-	    } else if (moved.isRook())
-	    {
-		((Rook) moved).setNotMoved(false);
-	    } else if (moved.isPawn())
-	    {
-		((Pawn) moved).setNotMoved(false);
-	    }
+	    ((MovementSensitive)moved).setNotMoved(false);
 	}
 	return new Error();
     }
@@ -757,11 +736,6 @@ public class PacChess
 	    }
 	}
 	return false;
-    }
-    
-    public void endTurn()
-    {
-	isWhiteTurn = !isWhiteTurn;
     }
 
     public int[] translateCoordinate(String space)
