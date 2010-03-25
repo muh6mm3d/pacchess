@@ -517,6 +517,37 @@ public class PacChess
     protected ArrayList<int[]> bishopValid(Piece p, Allegiance a, int[] coord)
     {
 	ArrayList<int[]> valid = new ArrayList<int[]>();
+
+	int[] rshift = {-1,-1,01,01};
+	int[] cshift = {-1,01,-1,01};
+
+	for(int i=0;i<rshift.length;i++)
+	{
+	    int rs=rshift[i];
+	    int cs=cshift[i];
+
+	    for(int r=coord[0]+rs, c=coord[1]+cs ; isValid(r,c) && p.viableMove(get(r,c)) ; r+=rs, c+=cs)
+	    {
+		if(isEmpty(r,c))
+		{
+		    valid.add(new int[]{r,c});
+		}
+		else
+		{
+		    if(p.viableMove(get(r,c)))
+		    {
+			valid.add(new int[]{r,c});
+			break;
+		    }
+		}
+	    }
+	}
+	return valid;
+    }
+
+    protected ArrayList<int[]> bishopValidOld(Piece p, Allegiance a, int[] coord)
+    {
+	ArrayList<int[]> valid = new ArrayList<int[]>();
 	//recurse north-west
 	    for (int r = coord[0] - 1, c = coord[1] - 1; isValid(r, c) && p.viableMove((get(r, c))); r--, c--)
 	    {
