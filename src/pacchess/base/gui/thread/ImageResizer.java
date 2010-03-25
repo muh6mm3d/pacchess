@@ -17,6 +17,7 @@ import pacchess.piece.Piece;
  */
 public class ImageResizer extends javax.swing.SwingWorker
 {
+    private static final int IMAGE_SCALING = Image.SCALE_SMOOTH;
     private String imagePath;
     private Integer scale;
     private HashMap<Allegiance,HashMap<Piece,Image>> imageLocation, imageStore;
@@ -49,8 +50,7 @@ public class ImageResizer extends javax.swing.SwingWorker
 		}*/
 		imageStore.get(a).put(key, large.getScaledInstance(scale,
 			scale,
-			Image.SCALE_SMOOTH)); //TODO SCALING
-		//System.out.println("\timage done..."+progress);
+			IMAGE_SCALING));
 		progress+=3;
 		setProgress(Math.min(progress,100));
 	    }

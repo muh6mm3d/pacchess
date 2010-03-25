@@ -20,26 +20,6 @@
 package pacchess.base;
 /*
  * http://www.network-science.de/ascii/
- *
- * Things that need revision or fixing
- * Revision:
- * 		checking to see if when the king is moved if he is in check when castling. need to review rules
- * 		Improve Initialization of board pieces using loops
- * 		Implement hasmaps in valid moves with kings to slim program logic.
- * FIX:
- * 		Make sure to change Kings back to private after testing is finished
- * 		Set NotMoved in Pawn, Rooks, and Kings when they are moved
- * 		Implement EnPessant
- * 			Figure out how to set isVulnerable and then disable it next turn TODO
- * 		Implement turn based movement
- */
-/*
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.PipedInputStream;
-import java.lang.reflect.InvocationTargetException;
  * 
  */
 
@@ -69,7 +49,6 @@ public class PacChess
     protected Pawn blackPawn, whitePawn;
     protected boolean modifyBlack, modifyWhite;
     protected boolean modify;
-    //TODO change kings back to protected after testing is done
     protected King bKing;
     protected King wKing;
 
@@ -665,10 +644,8 @@ public class PacChess
 
 	}
 	//Movement for when pawn moves two spaces forward
-	//TODO BROKEN/UNESSECARY CODE
 	else if (get(who).isPawn() && Math.max(who[0], where[0]) - Math.min(who[0], where[0]) == 2)
 	{
-	    //TODO figure out how to turn this parameter off
 	    ((Pawn) get(who)).setVulnerable(true);
 	    if (get(who).getAllegiance() == Allegiance.AWHITE)
 	    {

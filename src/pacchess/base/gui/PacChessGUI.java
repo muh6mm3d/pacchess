@@ -154,7 +154,6 @@ public class PacChessGUI extends JFrame implements
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(size);
         setLocation(50, 0);
-        //TODO setVisible(true);
 	scaleImages();
 	refreshBoardResize();
 	addComponentListener(this);
@@ -182,21 +181,7 @@ public class PacChessGUI extends JFrame implements
 	LoadingBarFrame progress = new LoadingBarFrame(res);
 	progress.execute();
 	while(!progress.isDone()){}
-	//TODO progress.dispose();
-	/*
-	for( Allegiance a : originalImages.keySet() )
-	{
-	    for( Piece key : originalImages.get(a).keySet() )
-	    {
-		Image large = originalImages.get(a).get(key);
-		scaledImages.get(a).put(key, large.getScaledInstance(buttons[0][0].getWidth(), buttons[0][0].getWidth()
-			, Image.SCALE_SMOOTH)); //TODO SCALING
-	    }
-	} *
-	 */
 	progress.dispose();
-	
-	
     }
 
     public void defaultColorBoard(int r, int c)
@@ -280,9 +265,6 @@ public class PacChessGUI extends JFrame implements
 		getY()+(getHeight()/2)-(progress.getHeight()/2) );
 	paneRefresh.addProgressBar(progress);
 	progress.execute();
-	//while(!progress.isDone()){}
-	//TODO progress.dispose();
-	//TODO setVisible(true);
         return true;
     }
 
@@ -343,24 +325,19 @@ public class PacChessGUI extends JFrame implements
             }
 	
         }
-        //throw new UnsupportedOperationException("Not supported yet.");//TODO finish Action performed, remove unsuppported exception
 
     }
 
     public void componentResized(ComponentEvent ce) {
-	    //TODO optimize componentResized
 	    System.out.println("component resized!");
 	    if(size.getHeight()!=getHeight())
 	    {
-		//setContentPane(loading);
 		setVisible(false);
 		setSize(getHeight(),getHeight());
 		scaleImages();
 		size.setSize(getHeight(),getHeight());
 		refreshBoardResize();
 	    }
-	    
-//	    System.out.println(buttons[0][0].getHeight());
     }
 
     public void componentMoved(ComponentEvent ce) {

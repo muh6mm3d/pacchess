@@ -71,26 +71,6 @@ public class King extends Piece
 	{
 		return inCheck(coord,this.controller);
 	}
-  public boolean inCheckNew(int[] coord, PacChess controller)
-  {
-      //TODO REPROGRAM INCHECK USING MY VALID MOVES METHODS. SO IT WILL BE CORRECT, Caused overflow error, fix this
-      Piece[][] board = controller.board();
-      for(int row=0;row<board.length;row++)
-      {
-          for(int col=0;col<board[0].length;col++)
-          {
-              int[][] enemyMoves = controller.validMovesCoordinate(new int[]{row,col});
-              for(int[] moves:enemyMoves)
-              {
-                  if(moves[0]==r&&moves[1]==c)
-                  {
-                      return true;
-                  }
-              }
-          }
-      }
-      return false;
-  }
 	public boolean inCheck(int[] coord, PacChess controller)
 	{
     //System.out.println();
@@ -369,7 +349,7 @@ public class King extends Piece
 		}
 		
 		/*
-		 * check for the opposing king who would be threatening the king. TODO
+		 * TODO check for the opposing king who would be threatening the king.
 		 * in order for this to happen, a supporting piece must be protecting
 		 * the opposing king. this sounds a little hard to implement
 		 */
