@@ -122,7 +122,7 @@ public class King extends Piece
 				if(controller.get(r,c).getAllegiance()!=allegiance&&(p.isQueen()||p.isRook()))
 				{
           //System.out.println(allegiance+" king is threatened by "+controller.get(r,c).getName()+" at coord: "
-               //   +controller.reverseCoordinate(new int[]{r,c}));
+               //   +controller.translateCoordinate(new int[]{r,c}));
 					return true;
 				}
 				finished=1;
@@ -140,7 +140,7 @@ public class King extends Piece
 				if(p.getAllegiance()!=allegiance&&(p.isQueen()||p.isRook()))
 				{
           //System.out.println(allegiance+" king is threatened by "+controller.get(r,c).getName()+" at coord: "
-               //   +controller.reverseCoordinate(new int[]{r,c}));
+               //   +controller.translateCoordinate(new int[]{r,c}));
 					return true;
 				}
 				finished=1;
@@ -158,7 +158,7 @@ public class King extends Piece
 				if(p.getAllegiance()!=allegiance&&(p.isQueen()||p.isRook()))
         {
         //System.out.println(allegiance+" king is threatened by "+controller.get(r,c).getName()+" at coord: "
-               //   +controller.reverseCoordinate(new int[]{r,c}));
+               //   +controller.translateCoordinate(new int[]{r,c}));
 					return true;
 				}
 				finished=1;
@@ -176,7 +176,7 @@ public class King extends Piece
 				if(p.getAllegiance()!=allegiance&&(p.isQueen()||p.isRook()))
 				{
           //System.out.println(allegiance+" king is threatened by "+controller.get(r,c).getName()+" at coord: "
-                //  +controller.reverseCoordinate(new int[]{r,c}));
+                //  +controller.translateCoordinate(new int[]{r,c}));
 					return true;
 				}
 				finished=1;
@@ -212,7 +212,7 @@ public class King extends Piece
 				if(p.getAllegiance()!=allegiance&&(p.isQueen()||p.isBishop()))
 				{
           //System.out.println(allegiance+" king is threatened by "+controller.get(r,c).getName()+" at coord: "
-                 // +controller.reverseCoordinate(new int[]{r,c}));
+                 // +controller.translateCoordinate(new int[]{r,c}));
 					return true;
 				}
 				finished=1;
@@ -230,7 +230,7 @@ public class King extends Piece
 				if(p.getAllegiance()!=allegiance&&(p.isQueen()||p.isBishop()))
 				{
           //System.out.println(allegiance+" king is threatened by "+controller.get(r,c).getName()+" at coord: "
-                 // +controller.reverseCoordinate(new int[]{r,c}));
+                 // +controller.translateCoordinate(new int[]{r,c}));
 					return true;
 				}
 				finished=1;
@@ -248,7 +248,7 @@ public class King extends Piece
 				if(p.getAllegiance()!=allegiance&&(p.isQueen()||p.isBishop()))
 				{
           //System.out.println(allegiance+" king is threatened by "+controller.get(r,c).getName()+" at coord: "
-                 // +controller.reverseCoordinate(new int[]{r,c}));
+                 // +controller.translateCoordinate(new int[]{r,c}));
 					return true;
 				}
 				finished=1;
@@ -266,7 +266,7 @@ public class King extends Piece
 				if(p.getAllegiance()!=allegiance&&(p.isQueen()||p.isBishop()))
 				{
           //System.out.println(allegiance+" king is threatened by "+controller.get(r,c).getName()+" at coord: "
-                //  +controller.reverseCoordinate(new int[]{r,c}));
+                //  +controller.translateCoordinate(new int[]{r,c}));
 					return true;
 				}
                                 finished=1;
