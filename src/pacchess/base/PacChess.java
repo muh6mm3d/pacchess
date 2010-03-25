@@ -61,17 +61,17 @@ import pacchess.piece.Rook;
 public class PacChess
 {
 
-    private Piece[][] board;
-    private HashMap<Long, ArrayList<Piece>> captured;
-    private HashMap<Allegiance, King> kings;
-    private HashMap<Long, ArrayList<Method>> startTurnMethods;
-    private boolean isWhiteTurn;
-    private Pawn blackPawn, whitePawn;
-    private boolean modifyBlack, modifyWhite;
-    private boolean modify;
-    //TODO change kings back to private after testing is done
-    public King bKing;
-    public King wKing;
+    protected Piece[][] board;
+    protected HashMap<Long, ArrayList<Piece>> captured;
+    protected HashMap<Allegiance, King> kings;
+    protected HashMap<Long, ArrayList<Method>> startTurnMethods;
+    protected boolean isWhiteTurn;
+    protected Pawn blackPawn, whitePawn;
+    protected boolean modifyBlack, modifyWhite;
+    protected boolean modify;
+    //TODO change kings back to protected after testing is done
+    protected King bKing;
+    protected King wKing;
 
     public PacChess()
     {
@@ -765,7 +765,44 @@ public class PacChess
 	    return valid;
     }
 
-    public ArrayList<int[]> kingValid(Piece p, Allegiance a, int[] coord)
+    protected ArrayList<int[]> kingValid(Piece p, Allegiance a, int[] coord)
+    {
+	ArrayList<int[]> valid = new ArrayList<int[]>();
+
+	int[]
+		rshift = {-1,-1,-1,00,00,01,01,01},
+		cshift = {-1,00,01,-1,01,-1,00,01};
+	for(int i=0; i<rshift.length; i++)
+	{
+	    int
+		    r = coord[0] + rshift[i],
+		    c = coord[1] + cshift[i];
+
+	    if( isValid(r,c) && p.viableMove(get(r,c)) )
+	    {
+		valid.add(new int[] {r,c});
+	    }
+	}
+
+
+	King p2 = (King) p;
+	//check to the left for clear path --- castling
+	int r = coord[0];
+	int c = coord[1];
+	if (!p2.inCheck() && p2.notMoved() && isEmpty(r, c - 1) && isEmpty(r, c - 2) && isEmpty(r, c - 3) && get(r, c - 4).isRook() && ((Rook) get(r, c - 4)).notMoved())
+	{
+	    valid.add(new int[] {r, c - 2});
+	}
+	//check to the right for clear path --- castling
+	if (!p2.inCheck() && p2.notMoved() && isEmpty(r, c + 1) && isEmpty(r, c + 2) && get(r, c + 3).isRook() && ((Rook) get(r, c + 3)).notMoved())
+	{
+	    valid.add(new int[] {r, c + 2});
+	}
+	return valid;
+
+    }
+
+    public ArrayList<int[]> kingValidOld(Piece p, Allegiance a, int[] coord)
     {
 	ArrayList<int[]> valid = new ArrayList<int[]>();
 	//north-west
@@ -954,7 +991,7 @@ public class PacChess
 	{
 	    return new int[0][0];
 	}
-	if(p.isPawn())
+	else if(p.isPawn())
 	{
 	    moves.addAll(pawnValid(p, a, coord));
 	}
@@ -966,11 +1003,11 @@ public class PacChess
 	{
 	    moves.addAll(bishopValid(p,a,coord));
 	}
-	if(p.isKnight())
+	else if(p.isKnight())
 	{
 	    moves.addAll(knightValid(p,a,coord));
 	}
-	if(p.isKing())
+	else if(p.isKing())
 	{
 	    moves.addAll(kingValid(p,a,coord));
 	}
@@ -1699,7 +1736,6 @@ public class PacChess
 	    }
 	    blackPawn = null;
 	}
-	//TODO CHECK TO MAKE SURE ENPESSANT IS IMPLEMENTED CORRECTLY
 	if (!isValid(who) || !isValid(where))
 	{
 	    return new Error(false, "Who or Where is Invalid. Out of Bounds of Board. \nwho: " + Arrays.toString(who) + "\nwhere: " + Arrays.toString(where));
@@ -1731,44 +1767,27 @@ public class PacChess
 	    if (columnGreater(who, where))
 	    {
 		//set variables inside king
-		((King) get(who)).move(new int[]
-			{
-			    who[0], who[1] - 2
-			});
+//		((King) get(who)).move(new int[]{who[0], who[1] - 2});
 
-		//System.out.println(get(who).isKing());
-		//System.out.println("set space to equal king: "+set(new int[]{who[0],who[1]-2},get(who)));
-		//System.out.println("set space who to be empty: "+set(who,new Empty()));
-		//System.out.println("move rook: "+set(new int[]{who[0],who[1]-1},get(new int[]{who[0],who[1]-4})));
-		//System.out.println("Make rooks old space empty: "+set(new int[]{who[0],who[1]-4},new Empty()));
-	    } //castle right
+		
+		set(new int[]{who[0],who[1]-2},get(who));
+		set(who,new Empty());
+		set(new int[]{who[0],who[1]-1},get(new int[]{who[0],who[1]-4}));
+		set(new int[]{who[0],who[1]-4},new Empty());
+	    }
+	    //castle right
 	    else if (columnGreater(where, who))
 	    {
 		//set variables inside king
-		((King) get(who)).move(new int[]
-			{
-			    who[0], who[1] - 2
-			});
-
-		set(new int[]
-			{
-			    who[0], who[1] + 2
-			}, get(who));
+		//((King) get(who)).move(new int[]{who[0], who[1] - 2});
+		set(new int[]{who[0], who[1] + 2}, get(who));
 		set(who, new Empty());
-		set(new int[]
-			{
-			    who[0], who[1] + 1
-			}, get(new int[]
-			{
-			    who[0], who[1] + 3
-			}));
-		set(new int[]
-			{
-			    who[0], who[1] + 3
-			}, new Empty());
+		set(new int[]{who[0], who[1] + 1}, get(new int[]{who[0], who[1] + 3}));
+		set(new int[]{who[0], who[1] + 3}, new Empty());
 	    }
 
-	} //Movement for when pawn moves two spaces forward
+	}
+	//Movement for when pawn moves two spaces forward
 	//TODO BROKEN/UNESSECARY CODE
 	else if (get(who).isPawn() && Math.max(who[0], where[0]) - Math.min(who[0], where[0]) == 2)
 	{
@@ -1885,31 +1904,7 @@ public class PacChess
 	}
 	return false;
     }
-    /*
-    public void startTurn()
-    {
-    Long id = isWhiteTurn?Allegiance.WHITE:Allegiance.BLACK;
-    //run for blacks turn beginning
-    if(id==Allegiance.WHITE)
-    {
-    //vulnerable turn is over for pawn, set it back to normal
-    if(modifyWhite)
-    {
-    whitePawn.setVulnerable(false);
-    whitePawn=null;
-    modifyWhite=false;
-    }
-    }
-    //run for whites turn beginning
-    else if(modifyBlack)
-    {
-    blackPawn.setVulnerable(false);
-    blackPawn=null;
-    modifyBlack=false;
-    }
-    }
-     */
-
+    
     public void endTurn()
     {
 	isWhiteTurn = !isWhiteTurn;
@@ -1967,80 +1962,5 @@ public class PacChess
 	}
 	return bKing.inCheckmate();
     }
-    /*
-    public static void main(String[] args)
-    {
-    //System.out.println("Welcome to chess\nnew game started.");
-    PacChess game = new PacChess();
-    while(true)
-    {
-
-
-    for(char c='a';c<='h';c++)
-    {
-    for(int i=1;i<=8;i++)
-    {
-    for(Piece[] col: game.board())
-    {
-    for(Piece p:col)
-    {
-    if(p.getAllegiance()==Allegiance.ABLACK)
-    {
-    System.out.print("b");
-    }
-    else if(p.getAllegiance()==Allegiance.AWHITE)
-    {
-    System.out.print("w");
-    }
-    else
-    {
-    System.out.print(" ");
-    }
-
-    if(p.getID()==Piece.PAWN)
-    {
-    System.out.print("p ");
-    }
-    if(p.getID()==Piece.KNIGHT)
-    {
-    System.out.print("k ");
-    }
-    if(p.getID()==Piece.BISHOP)
-    {
-    System.out.print("b ");
-    }
-    if(p.getID()==Piece.ROOK)
-    {
-    System.out.print("r ");
-    }
-    if(p.getID()==Piece.KING)
-    {
-    System.out.print("K ");
-    }
-    if(p.getID()==Piece.QUEEN)
-    {
-    System.out.print("Q ");
-    }
-    if(p.getID()==Piece.EMPTY)
-    {
-    System.out.print("  ");
-    }
-    }
-    //System.out.println();
-    }
-    //System.out.println("move "+c+i);
-    String[] moves = game.validMovesChess(game.translateCoordinate(""+c+i));
-    for(String s:moves)
-    {
-    //System.out.println("\t"+s);
-    }
-    (new Scanner(System.in)).nextLine();
-    for(int b=0;b<20;b++){//System.out.println();}
-    }
-    }
-
-    }
-
-    }
-     */
+ 
 }
