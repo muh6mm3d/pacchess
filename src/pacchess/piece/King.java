@@ -74,7 +74,112 @@ public class King extends Piece
 	{
 		return inCheck(coord,this.controller);
 	}
-	public boolean inCheck(int[] coord, PacChess controller)
+	public boolean inCheck(int[] co, PacChess c)
+	{
+		System.out.print("checking...");
+	   return (lateralAndDiagonalCheck(co,c)||
+			   knightCheck(co,c)||
+			   pawnCheck(co,c)||
+			   kingCheck(co,c));
+	}
+
+	public boolean lateralAndDiagonalCheck(int[] coord, PacChess controller)
+	{
+	     //lateral check
+	    int[] rshift = {-1,00,00,01,-1,-1,01,01};
+	    int[] cshift = {00,-1,01,00,-1,01,-1,01};
+
+	    for(int i=0; i<rshift.length; i++)
+	    {
+			int rs = rshift[i];
+			int cs = cshift[i];
+
+			for(int r=coord[0]+rs,c=coord[1]+cs,finished=-1;finished<0&&controller.isValid(r,c)&&this.viableMove(controller.get(r,c));c--)
+			{
+				//checks to see if the encountered space contains a piece
+				if(controller.get(r,c)!=this&&!controller.isEmpty(r,c))
+				{
+					Piece p = controller.get(r,c);
+					//if the piece encountered to the left is a rook or a queen,
+					//of opposite allegiance, the king is in check.
+					if(controller.get(r,c).getAllegiance()!=allegiance&&(p.isQueen()||p.isRook()))
+					{ System.out.println("lateralanddiagonaled"); return true;  }
+					break;
+					//finished=1;
+				}
+			}
+	    }
+	    return false;
+	}
+
+	public boolean knightCheck(int[] coord, PacChess controller)
+	{
+		/*
+		 * check for knights who are threatening the king
+		 *
+		 * 	   KNIGHT-MAP:
+		 *
+		 * 		.........
+		 * 		...2.3...
+		 * 		..1...4..
+		 * 		....K....
+		 * 		..8...5..
+		 * 		...7.6...
+		 * 		.........
+		 */
+		int[] rshift = {-1,01,-2,02,-2,02,-1,01};
+		int[] cshift = {-2,-2,-1,-1,01,01,02,02};
+		for(int i=0;i<rshift.length;i++)
+		{
+			int r = coord[0]+rshift[i];
+			int c = coord[1]+cshift[i];
+			if(controller.isValid(r,c)&&
+					controller.get(r,c).getAllegiance()!=allegiance&&
+					controller.get(r,c).isKnight())
+			{ System.out.println("knighted"); return true; }
+		}
+		return false;
+	}
+
+	protected boolean pawnCheck(int[] coord, PacChess controller)
+	{
+		int r;
+		if(allegiance.isBlack()) r=1;
+		else r=-1;
+
+		if(controller.isValid(coord[0]+r,coord[1]-1)&&
+				controller.get(coord[0]+r,coord[1]-1).isPawn())
+		{
+			if(!controller.get(coord[0]+r,coord[1]-1).getAllegiance().equals(allegiance))
+			{System.out.println("pawned");return true;}
+			
+		}
+		if(controller.isValid(coord[0]+r,coord[1]+1)&&controller.get(coord[0]+r,coord[1]+1).isPawn())
+		{
+			if(!controller.get(coord[0]+r,coord[1]+1).getAllegiance().equals(allegiance))
+			{System.out.println("pawned");return true;}
+			
+		}
+		return false;
+	}
+	protected boolean kingCheck(int[] coord, PacChess controller)
+	{
+		int[] rshift = {-1,-1,-1,00,00,01,01,01};
+		int[] cshift = {-1,00,01,-1,01,-1,00,01};
+		System.out.println("coord length: "+coord.length);
+		for(int i=0;i<rshift.length && i<cshift.length;i++)
+		{
+			int r = coord[0]+rshift[i];
+			int c = coord[1]+cshift[i];
+			if(controller.isValid(r,c)&&
+					controller.get(r,c)!=this&&
+					controller.get(r,c).isKing())
+			{System.out.println("kinged");return true;}
+		}
+		return false;
+	}
+
+	public boolean inCheckOld(int[] coord, PacChess controller)
 	{
     //System.out.println();
             /*
@@ -322,7 +427,7 @@ public class King extends Piece
 		 * 
 		 * a black pawn threatening a white king would be northwest or northeast
 		 */
-                if(allegiance.isBlack())
+        if(allegiance.isBlack())
 		{
 			//check to the south-west and south-east
 			if(controller.isValid(coord[0]+1,coord[1]-1)&&controller.get(coord[0]+1,coord[1]-1).isPawn())
@@ -397,30 +502,7 @@ public class King extends Piece
 		c=coord[1]-1;
 		if(controller.isValid(r,c)&&controller.get(r,c)!=this&&controller.get(r,c).isKing())
 			return true;
-	
-    /*   FINAL CHECK!!! 
-
-    ArrayList<Integer[]> moves = new ArrayList<Integer[]>();
-		for(int row=0;row<controller.board().length;row++)
-		{
-			for(int col=0;col<controller.board()[0].length;col++)
-			{
-				Piece p = controller.get(row,col);
-				if(p.getAllegiance()==this.allegiance)
-				{
-					int[][] collected = controller.validMovesCoordinate(new int[]{row,col});
-					for(int i=0;i<collected.length;i++)
-					{
-						moves.add(new Integer[]{collected[i][0],collected[i][1]});
-					}
-				}
-			}
-		}*/
-
-    /*
-    *finally if none of the above condition are true, * then the king is not in check
-		* which will return false 
-		*/
+		
 		return false;
 		
 		

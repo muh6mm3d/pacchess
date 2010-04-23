@@ -49,8 +49,12 @@ public class Allegiance
 	{
 		return aID;
 	}
-        public String toString()
-        {
-            return isBlack()?"Black":"White";
-        }
+	public boolean equals(Allegiance a)
+	{
+		return a.getID()==aID;
+	}
+	public String toString()
+	{
+		return isBlack()?"Black":"White";
+	}
 }

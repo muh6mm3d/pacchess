@@ -734,7 +734,7 @@ public class PacChess
     }
 
 
-    //This array contains method compares down to the individual data, not the memory
+    //This arrayContains method compares down to the individual data, not the memory
     //address of the "key"
     public boolean arrayContains(int[][] array, int[] key)
     {
