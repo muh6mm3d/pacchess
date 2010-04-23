@@ -19,9 +19,18 @@
  */
 package pacchess.piece;
 
+import pacchess.piece.allegiance.Allegiance;
+
 abstract public class Piece 
 {
-	public static final long KING=11125,QUEEN=54875,BISHOP=65975,KNIGHT=87245,ROOK=24887,PAWN=57423,EMPTY=88542;
+	public static final long
+			KING=11125,
+			QUEEN=54875,
+			BISHOP=65975,
+			KNIGHT=87245,
+			ROOK=24887,
+			PAWN=57423,
+			EMPTY=88542;
 	protected long ID;
 	protected Allegiance allegiance;
 	protected String name;

@@ -8,7 +8,7 @@ package pacchess.base.gui.thread;
 import java.awt.Image;
 import java.util.HashMap;
 import pacchess.base.gui.PacChessGUI;
-import pacchess.piece.Allegiance;
+import pacchess.piece.allegiance.Allegiance;
 import pacchess.piece.Piece;
 
 /**

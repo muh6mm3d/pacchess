@@ -14,7 +14,7 @@ import javax.swing.JButton;
 import pacchess.base.PacChess;
 import pacchess.base.gui.LoadingBarFrame;
 import pacchess.base.gui.PacChessGUI;
-import pacchess.piece.Allegiance;
+import pacchess.piece.allegiance.Allegiance;
 import pacchess.piece.Piece;
 
 /**

@@ -21,6 +21,7 @@
 //TODO COMMENT KING CODE
 package pacchess.piece;
 
+import pacchess.piece.allegiance.Allegiance;
 import java.util.ArrayList;
 
 import pacchess.base.PacChess;
@@ -43,7 +44,7 @@ public class King extends Piece
 
 	public boolean insertInto(String coord)
 	{
-		return insertInto(controller.translateCoordinate(coord));
+		return insertInto(PacChess.translateCoordinate(coord));
 	}
 	public boolean insertInto(int[] coord)
 	{
@@ -173,7 +174,7 @@ public class King extends Piece
 			int c = coord[1]+cshift[i];
 			if(controller.isValid(r,c)&&
 					controller.get(r,c)!=this&&
-					controller.get(r,c).isKing())
+					controller.get(r,c) instanceof King)
 			{System.out.println("kinged");return true;}
 		}
 		return false;

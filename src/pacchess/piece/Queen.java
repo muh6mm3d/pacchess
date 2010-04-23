@@ -19,6 +19,8 @@
  */
 package pacchess.piece;
 
+import pacchess.piece.allegiance.Allegiance;
+
 public class Queen extends Piece
 {
 	public Queen(Allegiance a)

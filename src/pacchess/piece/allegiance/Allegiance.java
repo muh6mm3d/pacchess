@@ -17,16 +17,16 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package pacchess.piece;
+package pacchess.piece.allegiance;
 
 public class Allegiance
 {
 	public static final long BLACK=65545487454L,WHITE=7879763321L,EMPTY=4155454454L;
 	private long aID;
 	
-	public static Allegiance ABLACK = new Allegiance(BLACK);
-	public static Allegiance AWHITE = new Allegiance(WHITE);
-	public static Allegiance ANONE = new Allegiance(EMPTY);
+	public static Allegiance ABLACK = new Black();
+	public static Allegiance AWHITE = new White();
+	public static Allegiance ANONE = new None();
 	
 	public Allegiance(long a)
 	{

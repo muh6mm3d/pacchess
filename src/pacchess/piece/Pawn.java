@@ -19,6 +19,8 @@
  */
 package pacchess.piece;
 
+import pacchess.piece.allegiance.Allegiance;
+
 public class Pawn extends Piece
 	implements MovementSensitive
 {

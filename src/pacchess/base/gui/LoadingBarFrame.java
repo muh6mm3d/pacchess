@@ -17,7 +17,7 @@ import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import javax.swing.SwingWorker;
 import pacchess.base.gui.thread.ImageResizer;
-import pacchess.piece.Allegiance;
+import pacchess.piece.allegiance.Allegiance;
 import pacchess.piece.Piece;
 
 /**

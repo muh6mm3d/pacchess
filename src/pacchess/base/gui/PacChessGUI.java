@@ -19,6 +19,7 @@
  */
 package pacchess.base.gui;
 
+import pacchess.piece.allegiance.Allegiance;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseListener;
