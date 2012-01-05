@@ -159,7 +159,7 @@ public class King extends Piece
 			
 			//check if the spot contains a knight which is of the opposite allegiance
 			if(controller.isValid(r,c)&&
-					!controller.get(r,c).equals(allegiance)&&
+					!(controller.get(r,c).getAllegiance().equals(allegiance))&&
 					controller.get(r,c) instanceof Knight)
 			{ return true; }
 		}
